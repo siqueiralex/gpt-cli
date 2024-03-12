@@ -155,6 +155,16 @@ def python(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:
     
 @main.command()
 def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    To start a conversation with Chat GPT and maintain the history though it.
+    Special prompts: 
+        'save' -> to save the entire conversation
+        'save last' -> to save the last message from gpt
+        After 'save' you will be prompted to provide 'filename' to save it: 
+    Special Filenames:
+        'clipboard' -> to save to the clipboard
+        '*.pdf' -> to save in a pdf file.
+    '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
