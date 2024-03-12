@@ -1,10 +1,22 @@
-# gpt-cli
-Use GPT in your Terminal
+# GPT-CLI
+Welcome to GPT-CLI, a simple for interacting with ChatGPT in your Terminal. 
 
-## Overview
-Welcome to gpt-cli, a simple command line interface (CLI) for interacting with Chat GPT. This tool is designed to help you communicate with Chat GPT and keep a history of your conversations. GPT-CLI also features a helper function for CLI commands, as well as for various languages including English, Portuguese, and Python. The text you want is conveniently returned to your clipboard for easy access and use.
+GPT-CLI also includes a variety of helper functions designed to enhance productivity.
+
+## OpenAI API Key
+
+Before running the code in this repository, please make sure to export your OpenAI API key to the environment.
+
+To export your API key, you can set it as an environment variable in your terminal by running the following command:
+
+```bash
+export OPENAI_API_KEY=<your_api_key_here>
+```
+
+Replace `<your_api_key_here>` with your actual OpenAI API key.
 
 ## Usage
+
 The basic command structure for gpt-cli is as follows:
 
 ```bash
@@ -51,6 +63,22 @@ $ "Olá, como está você?" # <- will be already on your clipboard
 To get a Python-related inquiry, such as requesting a specific function:
 
 ```bash
-gpt-cli python --prompt "python function to generate a random number"
+gpt-cli python "python function to generate a random number"
 $ random.randint(1, 100) # <- will be already on your clipboard
+```
+
+
+### Further Options
+
+Users are able to change the model, the max number of tokens and the temperature
+
+```bash
+gpt-cli python 'check if a number is prime' --gpt 4 --temperature .5 --max-tokens 100
+```
+
+Users can skip the prompt, so gpt-cli will shortly ask you to provide it.
+
+```bash
+gpt-cli en
+Prompt:
 ```
