@@ -1,0 +1,19 @@
+[project]
+name = "gpt-cli"
+description = ""
+authors = []
+requires-python = ">=3.11"
+dynamic = ["version", "dependencies", "urls",]
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["gpt_cli"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[project.scripts]
+gpt-cli = "gpt_cli.main:main"
