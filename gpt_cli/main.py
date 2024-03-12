@@ -28,6 +28,9 @@ main = typer.Typer(name="GPT Snippets CLI", add_completion=False, no_args_is_hel
 
 @main.command()
 def en(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    Get assistance with English phrasing. The improved phrase will be already on your clipboard
+    '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
@@ -58,6 +61,9 @@ def en(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int 
 
 @main.command()
 def pt(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    Get assistance with Portuguese phrasing. The improved phrase will be already on your clipboard
+    '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
@@ -87,7 +93,10 @@ def pt(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int 
     typer.echo(response.choices[0].message.content)
 
 @main.command()
-def cli(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+def term(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    Get assistance with Terminal Commands. Returned command will be available in your clipboard.
+    '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
@@ -120,6 +129,9 @@ def cli(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int
 
 @main.command()
 def python(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    Get assistance with Python Code. Returned code will be available in your clipboard.
+    '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
@@ -156,14 +168,8 @@ def python(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:
 @main.command()
 def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
     '''
-    To start a conversation with Chat GPT and maintain the history though it.
-    Special prompts: 
-        'save' -> to save the entire conversation
-        'save last' -> to save the last message from gpt
-        After 'save' you will be prompted to provide 'filename' to save it: 
-    Special Filenames:
-        'clipboard' -> to save to the clipboard
-        '*.pdf' -> to save in a pdf file.
+    Start a conversation with Chat GPT.
+    Prompt 'save' to save the entire conversation and 'save last' to save the last message from gpt
     '''
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
@@ -174,8 +180,10 @@ def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
         if prompt.lower().strip() == 'exit': return
         if prompt.lower().strip() == 'save last':
             content = complete_response
-            filename = typer.prompt("Filename")
-            if filename.lower().strip() == 'clipboard': return pyperclip.copy(content)
+            filename = typer.prompt("Filename (or type 'copy')")
+            if filename.lower().strip() == 'copy': 
+                typer.echo('Copied to clipboard.')
+                return pyperclip.copy(content)
 
             current_directory = os.getcwd()
             filepath = os.path.join(current_directory, filename)
@@ -202,8 +210,10 @@ def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
                 item2 = hist[i + 1]
                 content += f"{item1['content']}\n{item2['content']}\n"+'*'*80+"\n"
                 
-            filename = typer.prompt("Filename")
-            if filename.lower().strip() == 'clipboard': return pyperclip.copy(content)
+            filename = typer.prompt("Filename (or type 'copy')")
+            if filename.lower().strip() == 'copy': 
+                typer.echo('Copied to clipboard.')
+                return pyperclip.copy(content)
             
             current_directory = os.getcwd()
             filepath = os.path.join(current_directory, filename)
@@ -247,3 +257,5 @@ def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
         hist.append({'role' : 'assistant', 'content' : complete_response})
         
 
+if __name__ == '__main__':
+    main()

@@ -22,11 +22,11 @@ To start a conversation with Chat GPT and maintain a history of your conversatio
 gpt-cli chat
 ```
 
-### gpt-cli cli
-To get assistance with Command Line commands:
+### gpt-cli term
+To get assistance with Terminal Commands:
 
 ```bash
-gpt-cli cli 'list all files in folder with .txt extension'
+gpt-cli term 'list all files in folder with .txt extension'
 $ "ls *.txt" # <- will be already on your clipboard
 ```
 
