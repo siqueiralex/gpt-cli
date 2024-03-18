@@ -26,98 +26,6 @@ def simulate_typing(text, delay=0.01):
 main = typer.Typer(name="GPT Snippets CLI", add_completion=False)
 
 
-@main.callback(invoke_without_command=True)
-def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
-    '''
-    Start a conversation with Chat GPT.
-    Prompt 'save' to save the entire conversation and 'save last' to save the last message from gpt
-    '''
-    typer.echo(gpt_model[gpt])
-    typer.echo(f'{temperature=}')
-    typer.echo(f'{max_tokens=}')
-    hist = []
-    while True:
-        prompt = typer.prompt("Prompt")
-        if prompt.lower().strip() == 'exit': return
-        if prompt.lower().strip() == 'save last':
-            content = complete_response
-            filename = typer.prompt("Filename (or type 'copy')")
-            if filename.lower().strip() == 'copy': 
-                typer.echo('Copied to clipboard.')
-                return pyperclip.copy(content)
-
-            current_directory = os.getcwd()
-            filepath = os.path.join(current_directory, filename)
-            if filepath.endswith('.pdf'):
-                pdf = fpdf.FPDF()
-                pdf.add_page()
-                pdf.set_font("Helvetica", size = 12)
-                pdf.multi_cell(0, 10, content)
-                pdf.output(filepath)
-                
-            else:
-                with open(filepath, 'w') as file:
-                    file.write(content)
-                                
-            typer.echo('Saved to: ' +   filepath)
-            
-            continue
-
-        if prompt.lower().strip() == 'save':
-            
-            content = f"Conversation in {datetime.now().strftime('%d/%m/%Y %H:%M')}\n\n"
-            for i in range(0, len(hist), 2):
-                item1 = hist[i]
-                item2 = hist[i + 1]
-                content += f"{item1['content']}\n{item2['content']}\n"+'*'*80+"\n"
-                
-            filename = typer.prompt("Filename (or type 'copy')")
-            if filename.lower().strip() == 'copy': 
-                typer.echo('Copied to clipboard.')
-                return pyperclip.copy(content)
-            
-            current_directory = os.getcwd()
-            filepath = os.path.join(current_directory, filename)
-            if filepath.endswith('.pdf'):
-                pdf = fpdf.FPDF()
-                pdf.add_page()
-                pdf.set_font("Helvetica", size = 12)
-                pdf.multi_cell(0, 10, content)
-                pdf.output(filepath)
-                
-            else:
-                with open(filepath, 'w') as file:
-                    file.write(content)
-                                
-            typer.echo('Saved to: ' +   filepath)
-            return
-        
-        openai_client = OpenAI()
-
-        messages = [ *hist,
-            {'role' : 'user', 'content' : prompt}
-        ]
-        
-        response = openai_client.chat.completions.create(
-            model = gpt_model[gpt],
-            temperature = temperature,
-            max_tokens = max_tokens,
-            messages = messages,
-            stream = True
-        )
-        
-        complete_response = ''
-        for chunk in response:
-            chunk_message = chunk.choices[0].delta.content
-            if chunk_message:
-                complete_response += chunk_message
-                simulate_typing(f"{chunk_message}")
-        print()
-        
-        hist.append({'role' : 'user', 'content' : prompt})
-        hist.append({'role' : 'assistant', 'content' : complete_response})
-
-
 @main.command()
 def en(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
     '''
@@ -252,7 +160,99 @@ def python(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:
     
     pyperclip.copy(response.choices[0].message.content)
     typer.echo(response.choices[0].message.content)
+
+
+@main.callback(invoke_without_command=True)
+def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+    '''
+    Start a conversation with Chat GPT.
+    Prompt 'save' to save the entire conversation and 'save last' to save the last message from gpt
+    '''
+    typer.echo(gpt_model[gpt])
+    typer.echo(f'{temperature=}')
+    typer.echo(f'{max_tokens=}')
+    hist = []
+    while True:
+        prompt = typer.prompt("Prompt")
+        if prompt.lower().strip() == 'exit': return
+        if prompt.lower().strip() == 'save last':
+            content = complete_response
+            filename = typer.prompt("Filename (or type 'copy')")
+            if filename.lower().strip() == 'copy': 
+                typer.echo('Copied to clipboard.')
+                return pyperclip.copy(content)
+
+            current_directory = os.getcwd()
+            filepath = os.path.join(current_directory, filename)
+            if filepath.endswith('.pdf'):
+                pdf = fpdf.FPDF()
+                pdf.add_page()
+                pdf.set_font("Helvetica", size = 12)
+                pdf.multi_cell(0, 10, content)
+                pdf.output(filepath)
+                
+            else:
+                with open(filepath, 'w') as file:
+                    file.write(content)
+                                
+            typer.echo('Saved to: ' +   filepath)
+            
+            continue
+
+        if prompt.lower().strip() == 'save':
+            
+            content = f"Conversation in {datetime.now().strftime('%d/%m/%Y %H:%M')}\n\n"
+            for i in range(0, len(hist), 2):
+                item1 = hist[i]
+                item2 = hist[i + 1]
+                content += f"{item1['content']}\n{item2['content']}\n"+'*'*80+"\n"
+                
+            filename = typer.prompt("Filename (or type 'copy')")
+            if filename.lower().strip() == 'copy': 
+                typer.echo('Copied to clipboard.')
+                return pyperclip.copy(content)
+            
+            current_directory = os.getcwd()
+            filepath = os.path.join(current_directory, filename)
+            if filepath.endswith('.pdf'):
+                pdf = fpdf.FPDF()
+                pdf.add_page()
+                pdf.set_font("Helvetica", size = 12)
+                pdf.multi_cell(0, 10, content)
+                pdf.output(filepath)
+                
+            else:
+                with open(filepath, 'w') as file:
+                    file.write(content)
+                                
+            typer.echo('Saved to: ' +   filepath)
+            return
         
+        openai_client = OpenAI()
+
+        messages = [ *hist,
+            {'role' : 'user', 'content' : prompt}
+        ]
+        
+        response = openai_client.chat.completions.create(
+            model = gpt_model[gpt],
+            temperature = temperature,
+            max_tokens = max_tokens,
+            messages = messages,
+            stream = True
+        )
+        
+        complete_response = ''
+        for chunk in response:
+            chunk_message = chunk.choices[0].delta.content
+            if chunk_message:
+                complete_response += chunk_message
+                simulate_typing(f"{chunk_message}")
+        print()
+        
+        hist.append({'role' : 'user', 'content' : prompt})
+        hist.append({'role' : 'assistant', 'content' : complete_response})
+
 
 if __name__ == '__main__':
     main()
