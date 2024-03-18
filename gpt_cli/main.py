@@ -163,11 +163,15 @@ def python(prompt: str = typer.Argument(""), gpt: str = '3.5-turbo', max_tokens:
 
 
 @main.callback(invoke_without_command=True)
-def chat(gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
+def chat(ctx: typer.Context, gpt: str = '3.5-turbo', max_tokens:int = 2048, temperature:float = .8):
     '''
     Start a conversation with Chat GPT.
     Prompt 'save' to save the entire conversation and 'save last' to save the last message from gpt
     '''
+    """Sub-command that I would like to be the default."""
+    if ctx.invoked_subcommand is not None:
+        print("Skipping default command to run sub-command.")
+        return
     typer.echo(gpt_model[gpt])
     typer.echo(f'{temperature=}')
     typer.echo(f'{max_tokens=}')
