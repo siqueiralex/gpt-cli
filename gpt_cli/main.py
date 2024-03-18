@@ -23,7 +23,7 @@ def simulate_typing(text, delay=0.01):
 
 
 
-main = typer.Typer(name="GPT Snippets CLI", add_completion=False, no_args_is_help=True)
+main = typer.Typer(name="GPT Snippets CLI", add_completion=False)
 
 
 @main.callback(invoke_without_command=True)
