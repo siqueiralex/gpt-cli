@@ -27,11 +27,11 @@ gpt-cli [OPTIONS] COMMAND [ARGS]...
 The `gpt-cli` utility provides several commands:
 
 
-### gpt-cli chat
+### gpt-cli
 To start a conversation with Chat GPT and maintain a history of your conversations:
 
 ```bash
-gpt-cli chat
+gpt-cli
 ```
 
 ### gpt-cli term
@@ -59,11 +59,11 @@ gpt-cli pt "Olá, como tá?"
 $ "Olá, como está você?" # <- will be already on your clipboard
 ```
 
-### gpt-cli python
+### gpt-cli py
 To get a Python-related inquiry, such as requesting a specific function:
 
 ```bash
-gpt-cli python "python function to generate a random number"
+gpt-cli py "python function to generate a random number"
 $ random.randint(1, 100) # <- will be already on your clipboard
 ```
 
@@ -73,7 +73,7 @@ $ random.randint(1, 100) # <- will be already on your clipboard
 Users are able to change the model, the max number of tokens and the temperature
 
 ```bash
-gpt-cli python 'check if a number is prime' --gpt 4 --temperature .5 --max-tokens 100
+gpt-cli py 'check if a number is prime' --gpt 4 --temperature .5 --max-tokens 100
 ```
 
 Users can skip the prompt, so gpt-cli will shortly ask you to provide it.
