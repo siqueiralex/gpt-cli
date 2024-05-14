@@ -10,6 +10,7 @@ from datetime import datetime
 gpt_model = {
     '3.5-turbo' : 'gpt-3.5-turbo',
     '4' : 'gpt-4',
+    '4o': 'gpt-4o',
     '4-turbo' : 'gpt-4-turbo-preview'
 }
 

@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 .tool-versions
 .vscode/
-
+.DS_STORE
 # C extensions
 *.so
 
